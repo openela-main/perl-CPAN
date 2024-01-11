@@ -10,7 +10,7 @@
 
 Name:           perl-CPAN
 Version:        2.29
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Query, download and build perl modules from CPAN sites
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/CPAN
@@ -22,6 +22,8 @@ Patch1:         CPAN-2.18-Replace-configuration-directory-string-with-a-marke.pa
 # Some syntax fixes
 Patch2:         CPAN-2.32-s-gpg-gpg-in-system-add-quotes-where-needed.patch
 Patch3:         CPAN-2.32-s-dev-null-devnull.patch
+# CVE-2023-31484 - Add verify_SSL => 1
+Patch4:         CPAN-2.35-Add-verify-SSL.patch
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -264,6 +266,7 @@ with "%{_libexecdir}/%{name}/test".
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 # Change configuration name
 find -type f -exec perl -i -pe 's/XCPANCONFIGNAMEX/cpan/g' {} \;
 # Remove bundled modules
@@ -333,6 +336,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Tue Aug 01 2023 Michal Josef Špaček <mspacek@redhat.com> - 2.29-3
+- Resolves: rhbz#2218907 - Fix CVE-2023-31484
+
 * Wed Feb 16 2022 Jitka Plesnikova <jplesnik@redhat.com> - 2.29-2
 - Resolves: rhbz#2037211 - Enable gating
 
